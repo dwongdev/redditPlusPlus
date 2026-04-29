@@ -8,7 +8,7 @@ import { renderCollapseAward } from '../collapseAwards';
 import { css } from '../customCSS';
 import { filterComment } from '../filters/filters';
 import { settings } from '../settings/settings';
-import { renderUserInfo } from '../users/userInfo';
+import { UserInfoElements, renderUserInfo } from '../users/userInfo';
 import { renderContextMenu } from './contextMenu';
 import { renderGuidlines } from './guidelines';
 import { renderMoreReplies } from './moreReplies';
@@ -205,7 +205,7 @@ export async function renderComment(comment: Element) {
 
     // add anchors
     const commentAuthor = commentMeta.querySelector(`faceplate-tracker[noun="comment_author"]`);
-    const nickname = commentAuthor?.parentElement?.parentElement;
+    const nickname = commentAuthor?.parentElement?.parentElement?.parentElement;
 
     if (!nickname || !nickname.parentElement) return;
 
@@ -253,7 +253,13 @@ export async function renderComment(comment: Element) {
 
     const userId = comment.getAttribute(`author`)!;
     const userName = commentAuthor.querySelector(`a`)!;
-    renderUserInfo(userId, userName, tagsAnchor, infoAnchor, ContentType.Comment);
+
+    renderUserInfo(userId, ContentType.Comment, {
+        commentHeader: nickname,
+        nickName: userName,
+        tagsAnchor: tagsAnchor,
+        infoAnchor: infoAnchor
+    });
 
     waitActionRow(comment);
 }

@@ -13,9 +13,18 @@ const NEWUSER_SECONDS_SHIFT = DAY_SECONDS * 64;
 
 const loadQueue: Array<Function> = [];
 
-export async function renderUserInfo(userId: string, nickName: Element, tagsAnchor: Element, infoAnchor: Element, contentType: ContentType) {
+export interface UserInfoElements {
+    nickName: Element;
+    tagsAnchor: Element;
+    infoAnchor: Element;
+    commentHeader?: Element;
+}
+
+export async function renderUserInfo(userId: string, contentType: ContentType, elements: UserInfoElements) {
     const usernameMode = settings.USERNAME_MODE.get() as UsernameMode;
     if (settings.USER_INFO.isDisabled() && usernameMode == UsernameMode.ProfileName) return;
+
+    const { commentHeader, nickName, tagsAnchor, infoAnchor } = elements;
 
     if (DEBUG && PROFILE_USER_DATA) {
         profiler_comments.userDataLoading++;
@@ -42,7 +51,7 @@ export async function renderUserInfo(userId: string, nickName: Element, tagsAnch
         profiler_comments.userDataLoading--;
     }
 
-    if (usernameMode != UsernameMode.ProfileName && userData.nick != undefined && userData.nick) {
+    if (usernameMode != UsernameMode.ProfileName && userData.nick) {
         const maxSymbols = parseInt(settings.USERNAME_MAX_SIMBOLS.get());
         nickName.textContent = maxSymbols <= 0 || userData.nick.length < maxSymbols ? userData.nick : userData.nick.slice(0, maxSymbols - 2) + `...`;
 
@@ -50,11 +59,10 @@ export async function renderUserInfo(userId: string, nickName: Element, tagsAnch
             if (userId == nickName.textContent) {
                 nickName.textContent = `u/${nickName.textContent}`;
             } else if (contentType == ContentType.Comment) {
-                const commentHeader = nickName.parentElement!.parentElement!.parentElement!.parentElement!.parentElement!;
                 const flair = commentHeader?.querySelector(`author-flair-event-handler`);
 
                 let profileContainer =
-                    flair != null ? flair.parentElement! : appendElement(commentHeader, `div`, [`flex`, `flex-none`, `flex-row`, `items-center`, `flex-nowrap`, `gap-2xs`, `pt-[2px]`]);
+                    flair != null ? flair.parentElement! : appendElement(commentHeader!, `div`, [`flex`, `flex-none`, `flex-row`, `items-center`, `flex-nowrap`, `gap-2xs`, `pt-[2px]`]);
 
                 const profileName = prependElement(profileContainer, `div`, [`font-bold`, `text-neutral-content-strong`, `text-12`]);
                 profileName.textContent = `u/${userId}`;

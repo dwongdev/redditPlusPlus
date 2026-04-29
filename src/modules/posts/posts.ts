@@ -209,7 +209,11 @@ async function renderHeader(post: Element) {
         userNameLink.before(point);
 
         // userInfo
-        renderUserInfo(author, userName, anchor, anchor, ContentType.Post);
+        renderUserInfo(author, ContentType.Post, {
+            nickName: userName,
+            tagsAnchor: anchor,
+            infoAnchor: anchor
+        });
     } else {
         // userInfo
         const creditBar = await dynamic(() => post.querySelector(`[slot="credit-bar"]`), MAX_LOAD_LAG); // usually it's span, but sometimes div
@@ -220,7 +224,11 @@ async function renderHeader(post: Element) {
         // skip post view
         if (!anchor || !userName) return;
 
-        renderUserInfo(author, userName, anchor, anchor, ContentType.Post);
+        renderUserInfo(author, ContentType.Post, {
+            nickName: userName,
+            tagsAnchor: anchor,
+            infoAnchor: anchor
+        });
     }
 }
 
