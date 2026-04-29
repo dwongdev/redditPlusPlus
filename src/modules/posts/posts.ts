@@ -121,16 +121,8 @@ export function getSub(post: Element): string {
 async function renderPostFlair(post: Element) {
     const sub = getSub(post);
 
-    const dynamicResult = await dynamic(() => {
-        const container = post.querySelector(`shreddit-post-flair`);
-        const flair = container?.querySelector<HTMLAnchorElement>(`a`);
-
-        return container && flair ? ([container, flair] as const) : null;
-    }, MAX_LOAD_LAG);
-
-    if (!dynamicResult) return;
-
-    const [postFlairContainer, postFlair] = dynamicResult;
+    const postFlairContainer = await dynamic(() => post.querySelector(`shreddit-post-flair`), MAX_LOAD_LAG);
+    const postFlair = await dynamic(() => postFlairContainer?.querySelector<HTMLAnchorElement>(`a`), 20);
 
     let flairText: string = ``;
 
