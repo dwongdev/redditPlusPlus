@@ -77,7 +77,7 @@ export async function renderGuidlines(comment: Element) {
 
     // branch in parent guideline
     if (depth > 0) {
-        const branches = comment.parentElement!.shadowRoot!.querySelector(`#comment-children`);
+        const branches = await dynamic(() => comment.parentElement?.shadowRoot?.querySelector(`#comment-children`));
 
         const slotName = comment.getAttribute(`slot`);
         const branch = await dynamic(() => {
