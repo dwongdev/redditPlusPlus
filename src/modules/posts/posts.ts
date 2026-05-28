@@ -103,10 +103,18 @@ export async function renderPost(post: Element) {
     renderCollapseAward(post, ContentType.Post);
 
     if (settings.SELECTABLE_POSTS.isEnabled()) {
-        post.querySelector(`a[slot="full-post-link"]`)?.remove();
+        const fullPostLink = post.querySelector(`a[slot="full-post-link"]`);
+        fullPostLink?.remove();
 
         const tittle = await dynamic(() => post.querySelector(`a[slot="title"]`), MAX_LOAD_LAG);
-        tittle?.classList?.add(`pp_post_tittle`);
+
+        if (tittle) {
+            tittle.classList.add(`pp_post_tittle`);
+
+            if (fullPostLink && fullPostLink.getAttribute(`target`) == `_blank`) {
+                tittle.setAttribute(`target`, `_blank`);
+            }
+        }
     }
 
     if (DEBUG && SHOW_RENDERED_POSTS) {
