@@ -18,8 +18,8 @@ export async function renderHeader(container: Element) {
 
     if (!nav || checkIsRendered(nav)) return;
 
-    const logo = container.querySelector(`#reddit-logo`)!;
-    const logoPP = appendElement(logo, `div`, `pp_logo`);
+    const logo = await dynamic(() => container.querySelector(`#reddit-logo`));
+    const logoPP = appendElement(logo!, `div`, `pp_logo`);
     logoPP.textContent = `++`;
     if (DEBUG) {
         logoPP.innerHTML = logoPP.textContent + ` <sup>(dev ${VERSION})</sup>`;
