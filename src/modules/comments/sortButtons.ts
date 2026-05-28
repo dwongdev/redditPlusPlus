@@ -185,11 +185,14 @@ export async function renderCommentsSortButtons(container: Element) {
 }
 
 async function renderSearchComments(container: Element) {
-    const searchSpan = await dynamic(() => container.querySelector(`comment-body-header`)?.querySelector(`pdp-comment-search-input`)?.shadowRoot?.querySelector(`.pr-xs`), MAX_LOAD_LAG);
+    const searchSpan = await dynamic(
+        () => container.querySelector(`comment-body-header`)?.querySelector(`pdp-comment-search-input`)?.shadowRoot?.querySelector(`button`)?.querySelector(`.text-start`),
+        MAX_LOAD_LAG
+    );
 
-    if (searchSpan == null) return;
-
-    searchSpan.textContent = `Search`;
+    if (searchSpan) {
+        searchSpan.textContent = `Search`;
+    }
 }
 
 let isCommentsSortLocked: boolean = false;
