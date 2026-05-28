@@ -1,12 +1,12 @@
 import { PROFILE_USER_DATA, SHOW_RENDERED_COMMENTS, profiler_comments } from '../../_debug/debug';
 import { ContentType, MAX_LOAD_LAG } from '../../defines';
 import { dynamic } from '../../utils/dynamic';
-import { imageViewer } from '../../utils/imageViewer';
 import { checkIsRendered, observeChildren } from '../../utils/tools';
 import { renderCommentBookmark } from '../bookmark';
 import { renderCollapseAward } from '../collapseAwards';
 import { css } from '../customCSS';
 import { filterComment } from '../filters/filters';
+import { lightbox } from '../images/customLightbox';
 import { settings } from '../settings/settings';
 import { UserInfoElements, renderUserInfo } from '../users/userInfo';
 import { renderContextMenu } from './contextMenu';
@@ -233,7 +233,7 @@ export async function renderComment(comment: Element) {
 
     // register image
     const imageContainer = commentBody.querySelector(`figure[class="rte-media"]`);
-    if (imageContainer != null && settings.IMAGE_VIEWER.isEnabled()) {
+    if (imageContainer != null && settings.LIGHTBOX.isEnabled()) {
         const imageAnchor = imageContainer.querySelector(`a`) as HTMLAnchorElement;
         const href = imageAnchor.href;
         imageAnchor.removeAttribute(`href`);
@@ -242,10 +242,10 @@ export async function renderComment(comment: Element) {
         if (image == null) {
             image = imageContainer.querySelector(`shreddit-player`);
         }
-        image.classList.add(`pp_imageViewable`);
+        image.classList.add(`pp_image_pointer`);
 
         imageAnchor.addEventListener(`click`, () => {
-            imageViewer.open(href);
+            lightbox.open(href);
         });
     }
 

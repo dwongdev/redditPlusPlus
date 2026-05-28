@@ -52,7 +52,9 @@ function renderSettingsWindow(win: Window, context: any) {
 
     addSubtitle(`Common enhancements`);
     addGotoButton(`Profile menu`, `Hide and replace profile menu elements`, profileMenuWindow);
-    addSettingToggle(`Image viewer`, `Zoom images instead of default redirect behaviour`, settings.IMAGE_VIEWER);
+    addSettingToggle(`Zoomable lightbox`, `Open all images in a zoomable lightbox`, settings.LIGHTBOX);
+    addSettingToggle(`Close on background click`, `Close the lightbox when clicking outside the image`, settings.LIGHTBOX_CLOSE, [SettingBadge.New]);
+    addSettingToggle(`Background navigation`, `Navigate between images by clicking the left or right side of the background`, settings.LIGHTBOX_NAVIGATION, [SettingBadge.New]);
     addSettingToggle(`Scroll to top button`, null, settings.SCROLL_TO_TOP);
     addSettingString(`Content font size`, `Text size for posts and comments (default: 14px)`, settings.BIGGER_FONTS_CONTENT_SIZE);
     addSettingString(`UI font size`, `Text size for UI elements (headings, buttons, etc.) (default: 12px)`, settings.BIGGER_FONTS_OTHER_SIZE);

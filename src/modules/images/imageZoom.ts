@@ -1,13 +1,3 @@
-import { css } from '../modules/customCSS';
-import { appendElement } from './element';
-import { buildSvg } from './svg';
-
-import imageCloseButtonSvg from '@resources/imageCloseButton.svg';
-
-import style from './imageViewer.less';
-
-css.addStyle(style);
-
 class Mouse {
     public x!: number;
     public y!: number;
@@ -20,18 +10,12 @@ class Drag {
     public scale!: number;
 }
 
-class ImageViewer {
-    openned: boolean;
-    viewer!: HTMLElement;
-    container!: HTMLElement;
-    image!: HTMLImageElement;
-
+class ImageZoom {
+    canvas: HTMLElement | null = null;
     mouse: Mouse;
     drag: Drag;
 
     constructor() {
-        this.openned = false;
-
         this.mouse = { x: 0, y: 0 };
         this.drag = {
             enabled: false,
@@ -46,90 +30,54 @@ class ImageViewer {
         this.endDrag = this.endDrag.bind(this);
     }
 
-    open(src: string) {
-        if (this.openned) return;
-        this.openned = true;
+    setImage(image: HTMLElement) {
+        if (image == this.canvas) return;
 
-        if (this.viewer == undefined) {
-            this.build();
+        if (this.canvas) {
+            this.clearImage();
         }
 
-        this.image.src = src;
-
         window.addEventListener('wheel', this.scrollImage, { passive: false });
-        this.image.addEventListener('mousedown', this.startDrag);
+        image.addEventListener('mousedown', this.startDrag);
         document.addEventListener('mousemove', this.mouseMove);
-        this.image.addEventListener('mouseup', this.endDrag);
-        this.image.addEventListener('mouseleave', this.endDrag);
+        image.addEventListener('mouseup', this.endDrag);
+        image.addEventListener('mouseleave', this.endDrag);
+
+        image.ondragstart = function () {
+            return false;
+        };
 
         // reset pos
         this.drag.current = { x: 0, y: 0 };
         this.drag.scale = 1;
 
+        this.canvas = image;
         this.updateTransform();
-
-        document.body.appendChild(this.viewer);
     }
 
-    close() {
-        this.viewer.remove();
-
-        this.drag.enabled = false;
-
-        this.container.classList.toggle(`pp_imageViewer_drag`, false);
-
+    clearImage() {
         window.removeEventListener('wheel', this.scrollImage);
-        this.image.removeEventListener('mousedown', this.startDrag);
+        this.canvas?.removeEventListener('mousedown', this.startDrag);
         document.removeEventListener('mousemove', this.mouseMove);
-        this.image.removeEventListener('mouseup', this.endDrag);
-        this.image.removeEventListener('mouseleave', this.endDrag);
+        this.canvas?.removeEventListener('mouseup', this.endDrag);
+        this.canvas?.removeEventListener('mouseleave', this.endDrag);
 
-        this.openned = false;
+        this.canvas = null;
     }
 
-    build() {
-        this.viewer = document.createElement(`div`);
-        this.viewer.classList.add(`pp_imageViewer`);
-        this.viewer.dataset.open = String(false);
-
-        const closeButton = appendElement(this.viewer, `div`, `pp_imageViewer_closeButton`);
-
-        const closeSvg = buildSvg(imageCloseButtonSvg, 40, 40);
-        closeButton.appendChild(closeSvg);
-
-        this.container = appendElement(this.viewer, `div`, `pp_imageViewer_imageContainer`);
-
-        this.image = appendElement(this.container, `img`, `pp_imageViewer_image`) as HTMLImageElement;
-        this.image.alt = `Comment image`;
-        this.image.ondragstart = function () {
-            return false;
-        };
-
-        // close
-        this.viewer.addEventListener('click', e => {
-            if (e.target != this.image) {
-                this.close();
-            }
-        });
-
-        closeButton.addEventListener('click', () => {
-            this.close();
-        });
+    private updateTransform() {
+        this.canvas!.style.transform = `translate(${this.drag.current.x}px, ${this.drag.current.y}px) scale(${this.drag.scale}, ${this.drag.scale})`;
     }
 
-    updateTransform() {
-        this.container.style.transform = `translate(${this.drag.current.x}px, ${this.drag.current.y}px) scale(${this.drag.scale}, ${this.drag.scale})`;
-    }
-
-    startDrag(event: any) {
+    private startDrag(event: any) {
         this.drag.start.x = event.screenX - this.drag.current.x;
         this.drag.start.y = event.screenY - this.drag.current.y;
         this.drag.enabled = true;
 
-        this.container.classList.toggle(`pp_imageViewer_drag`, true);
+        this.canvas!.classList.toggle(`pp_image_drag`, true);
     }
 
-    mouseMove(event: any) {
+    private mouseMove(event: any) {
         this.mouse.x = event.clientX;
         this.mouse.y = event.clientY;
 
@@ -141,22 +89,22 @@ class ImageViewer {
         }
     }
 
-    endDrag() {
+    private endDrag() {
         this.fit(1);
 
         this.drag.enabled = false;
 
-        this.container.classList.toggle(`pp_imageViewer_drag`, false);
+        this.canvas!.classList.toggle(`pp_image_drag`, false);
     }
 
-    scrollImage(e: any) {
+    private scrollImage(e: any) {
         const m = Math.max(1.0, 1.0 + Math.log2(this.drag.scale * this.drag.scale));
 
         const prevScale = this.drag.scale;
 
         this.drag.scale = Math.max(0.5, this.drag.scale + (-e.deltaY / 1000) * m);
 
-        const rect = this.image.getBoundingClientRect();
+        const rect = this.canvas!.getBoundingClientRect();
 
         const hh = rect.height / 2;
         const hw = rect.width / 2;
@@ -178,9 +126,9 @@ class ImageViewer {
         e.preventDefault();
     }
 
-    fit(force: number) {
+    private fit(force: number) {
         const offset = 0;
-        const rect = this.image.getBoundingClientRect();
+        const rect = this.canvas!.getBoundingClientRect();
 
         const left = offset - rect.left;
         const right = rect.right - window.innerWidth + offset;
@@ -204,4 +152,4 @@ class ImageViewer {
     }
 }
 
-export const imageViewer = new ImageViewer();
+export const imageZoom = new ImageZoom();

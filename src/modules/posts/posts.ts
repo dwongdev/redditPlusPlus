@@ -3,7 +3,6 @@ import { ContentType, MAX_LOAD_LAG } from '../../defines';
 import { Database, DatabaseConfig, ICleanupableData } from '../../utils/database';
 import { dynamic } from '../../utils/dynamic';
 import { appendElement } from '../../utils/element';
-import { imageViewer } from '../../utils/imageViewer';
 import { requestAPI } from '../../utils/redditAPI';
 import { buildSvg } from '../../utils/svg';
 import { checkIsRendered } from '../../utils/tools';
@@ -11,6 +10,7 @@ import { bookmarksCss, renderBookmarkPost } from '../bookmark';
 import { renderCollapseAward } from '../collapseAwards';
 import { CustomCSS } from '../customCSS';
 import { filterPost } from '../filters/filters';
+import { lightbox } from '../images/customLightbox';
 import { settings } from '../settings/settings';
 import { FlairData, renderFlair } from '../subs/flair';
 import { pp_log } from '../toaster';
@@ -273,7 +273,7 @@ async function renderContent(post: Element) {
 }
 
 async function registerImages(post: Element, isFeed: boolean) {
-    if (settings.IMAGE_VIEWER.isDisabled()) return;
+    if (settings.LIGHTBOX.isDisabled()) return;
 
     if (isFeed) {
         const anyImage = await dynamic(() => post.querySelector(`faceplate-img`), MAX_LOAD_LAG);
@@ -284,11 +284,11 @@ async function registerImages(post: Element, isFeed: boolean) {
 
                 let image = imageContainer.shadowRoot?.querySelector(`img`) as HTMLImageElement;
                 if (image != null) {
-                    image.classList.add(`pp_imageViewable`);
+                    image.classList.add(`pp_image_pointer`);
                 }
 
                 imageContainer.addEventListener(`click`, () => {
-                    imageViewer.open(href);
+                    lightbox.open(href);
                 });
             });
         }
@@ -302,10 +302,10 @@ async function registerImages(post: Element, isFeed: boolean) {
             if (image == null) {
                 image = imageContainer.querySelector(`shreddit-player-2`);
             }
-            image.classList.add(`pp_imageViewable`);
+            image.classList.add(`pp_image_pointer`);
 
             imageAnchor.addEventListener(`click`, () => {
-                imageViewer.open(href);
+                lightbox.open(href);
             });
         });
     }

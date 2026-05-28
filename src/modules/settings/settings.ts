@@ -1,4 +1,4 @@
-import { Database } from '../../utils/database';
+import { Database, DatabaseFactory } from '../../utils/database';
 import { BookmarkMode } from '../bookmarkMode';
 import { AwardsMode } from '../collapseAwardsMode';
 import { GuidelinesColor } from '../comments/guidelinesColor';
@@ -16,9 +16,8 @@ export class SettingBoolProperty {
 
     isEnabled(): boolean {
         const rawValue = settingsDatabase.get(this.name);
-        const isDefault = rawValue instanceof Object;
 
-        return isDefault ? this.defailtValue : (rawValue as boolean);
+        return rawValue == null ? this.defailtValue : (rawValue as boolean);
     }
 
     isDisabled(): boolean {
@@ -47,9 +46,8 @@ export class SettingDropdownProperty {
 
     get(): string {
         const rawValue = settingsDatabase.get(this.name);
-        const isDefault = rawValue instanceof Object;
 
-        return isDefault ? this.values[this.defaultIndex] : (rawValue as string);
+        return rawValue == null ? this.values[this.defaultIndex] : (rawValue as string);
     }
 
     getIndex(): number {
@@ -79,9 +77,8 @@ export class SettingStringProperty {
 
     get(): string {
         const rawValue = settingsDatabase.get(this.name);
-        const isDefault = rawValue instanceof Object;
 
-        return isDefault ? this.defaultValue : (rawValue as string);
+        return rawValue == null ? this.defaultValue : (rawValue as string);
     }
 
     isDefault(): boolean {
@@ -124,7 +121,9 @@ class SettingsManager {
     public BIGGER_FONTS_CONTENT_SIZE = new SettingStringProperty(`biggerFontsContentSize`, `16`, defaultPositiveFilter(16));
     public BIGGER_FONTS_OTHER_SIZE = new SettingStringProperty(`biggerFontsOtherSize`, `12`, defaultPositiveFilter(12));
     public SCROLL_TO_TOP = new SettingBoolProperty(`scrollToTop`);
-    public IMAGE_VIEWER = new SettingBoolProperty(`imageViewer`);
+    public LIGHTBOX = new SettingBoolProperty(`imageViewer`);
+    public LIGHTBOX_CLOSE = new SettingBoolProperty(`lightboxClose`);
+    public LIGHTBOX_NAVIGATION = new SettingBoolProperty(`lightboxNavigation`);
     public COLLAPSE_AWARDS = new SettingDropdownProperty(`collapseAwards`, Object.values(AwardsMode), 1);
     public REDIRECT_MODE = new SettingDropdownProperty(`redirectMode`, Object.values(RedirectMode), 1);
     public USER_SEARCH_SHORTCUTS = new SettingBoolProperty(`userSearchShortcuts`, false);
@@ -208,6 +207,6 @@ class SettingsManager {
     }
 }
 
-const settingsDatabase = new Database<object | string | boolean>(`SETTINGS`);
+const settingsDatabase = new Database<object | string | boolean | null>(`SETTINGS`, { factory: DatabaseFactory.Null });
 
 export const settings = new SettingsManager();

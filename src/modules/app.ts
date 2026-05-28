@@ -7,6 +7,7 @@ import { renderComments } from './comments/comments';
 import { css } from './customCSS';
 import { renderFeed } from './feed/feed';
 import { clearHiddenContentButton } from './filters/hiddenContent';
+import { renderNativeLightbox } from './images/nativeLightbox';
 import { renderRightSidebar } from './rightSidebar';
 import { renderSidebar } from './sidebar/sidebar';
 import { pp_log } from './toaster';
@@ -36,6 +37,8 @@ export async function renderApp() {
     } else {
         renderFeed(document.body);
     }
+
+    renderNativeLightbox();
 
     renderComments(document.body);
 
