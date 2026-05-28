@@ -91,6 +91,7 @@ function renderSettingsWindow(win: Window, context: any) {
     addSettingToggle(`Sort buttons`, `Unwrap comment sort buttons`, settings.COMMENTS_SORT_BUTTONS);
     addSettingToggle(`Remember sort`, `Remember the last used comment sort`, settings.COMMENTS_REMEMBER_SORT);
     addSettingToggle(`Hide related posts`, `Hides the related posts section`, settings.HIDE_RELATED_POSTS);
+    addSettingToggle(`Hide sticky "Join the conversation"`, `Hide the "Join the conversation" bar when scrolling`, settings.HIDE_STICKY_COMPOSER);
 
     addSubtitle(`Comments`);
     addSettingToggle(`Unwrap "more replies"`, `Automatically unwrap more replies when it becomes visible`, settings.UNWRAP_MORE_REPLIES);

@@ -161,6 +161,9 @@ class SettingsManager {
     // comments
     public COMMENTS_SORT_BUTTONS = new SettingBoolProperty(`commentSortButtons`);
     public COMMENTS_REMEMBER_SORT = new SettingBoolProperty(`commentRememberSort`);
+    public HIDE_RELATED_POSTS = new SettingBoolProperty(`hideRelatedPosts`, false);
+    public HIDE_STICKY_COMPOSER = new SettingBoolProperty(`hideStickyComposer`, false);
+
     public UNWRAP_MORE_REPLIES = new SettingBoolProperty(`unwrapMoreReplies`, false);
     public USER_INFO = new SettingBoolProperty(`userInfo`, false);
     public USERNAME_MODE = new SettingDropdownProperty(`usernameMode`, Object.values(UsernameMode), 0);
@@ -170,7 +173,6 @@ class SettingsManager {
     public GHOSTED_COMMENTS = new SettingBoolProperty(`ghostedComments`);
     public COLLAPSE_AUTOMODERATOR = new SettingBoolProperty(`collapseAutomoderator`);
     public SAVED_BOOKMARK_COMMENTS = new SettingDropdownProperty(`savedBookmarkComments`, Object.values(BookmarkMode), 1);
-    public HIDE_RELATED_POSTS = new SettingBoolProperty(`hideRelatedPosts`, false);
     public GUIDELINES_COLOR = new SettingDropdownProperty(`guidelinesColor`, Object.values(GuidelinesColor), 0);
     public GUIDELINES_THICK = new SettingBoolProperty(`guidelinesThick`, false);
 

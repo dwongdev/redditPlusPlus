@@ -17,6 +17,7 @@ import { renderUserTags } from './userTags';
 
 import style from './comments.less';
 import hideShareStyle from './hideShare.less';
+import hideStickyComposerStyle from './hideStickyComposer.less';
 
 let rootIntersector: IntersectionObserver | null = null;
 let commentsIntersector: IntersectionObserver | null = null;
@@ -27,6 +28,10 @@ export async function renderComments(container: Element) {
 
     if (settings.HIDE_SHARE.isEnabled()) {
         css.addStyle(hideShareStyle, `hideShare`);
+    }
+
+    if (settings.HIDE_STICKY_COMPOSER.isEnabled()) {
+        css.addStyle(hideStickyComposerStyle, `hideStickyComposer`);
     }
 
     // intersections
