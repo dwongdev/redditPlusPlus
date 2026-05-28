@@ -29,13 +29,9 @@ export async function renderHeader(container: Element) {
         if (!userPanel) return;
 
         userPanel.classList.add(`pp_userPanel`);
-        userPanel.addEventListener(
-            `click`,
-            () => {
-                renderProfileMenu();
-            },
-            { once: true }
-        );
+        userPanel.addEventListener(`click`, () => {
+            renderProfileMenu();
+        });
     });
 
     /*
