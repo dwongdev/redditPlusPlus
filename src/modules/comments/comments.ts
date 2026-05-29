@@ -260,7 +260,7 @@ export async function renderComment(comment: Element) {
     const userName = commentAuthor.querySelector(`a`)!;
 
     renderUserInfo(userId, ContentType.Comment, {
-        commentHeader: nickname,
+        commentMeta: commentMeta,
         nickName: userName,
         tagsAnchor: tagsAnchor,
         infoAnchor: infoAnchor

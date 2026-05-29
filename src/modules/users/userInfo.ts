@@ -17,14 +17,14 @@ export interface UserInfoElements {
     nickName: Element;
     tagsAnchor: Element;
     infoAnchor: Element;
-    commentHeader?: Element;
+    commentMeta?: Element;
 }
 
 export async function renderUserInfo(userId: string, contentType: ContentType, elements: UserInfoElements) {
     const usernameMode = settings.USERNAME_MODE.get() as UsernameMode;
     if (settings.USER_INFO.isDisabled() && usernameMode == UsernameMode.ProfileName) return;
 
-    const { commentHeader, nickName, tagsAnchor, infoAnchor } = elements;
+    const { commentMeta, nickName, tagsAnchor, infoAnchor } = elements;
 
     if (DEBUG && PROFILE_USER_DATA) {
         profiler_comments.userDataLoading++;
@@ -59,14 +59,13 @@ export async function renderUserInfo(userId: string, contentType: ContentType, e
             if (userId == nickName.textContent) {
                 nickName.textContent = `u/${nickName.textContent}`;
             } else if (contentType == ContentType.Comment) {
-                const flair = commentHeader?.querySelector(`author-flair-event-handler`);
+                const profileContainer = commentMeta?.querySelector(`author-flair-event-handler`)?.parentElement;
 
-                let profileContainer =
-                    flair != null ? flair.parentElement! : appendElement(commentHeader!, `div`, [`flex`, `flex-none`, `flex-row`, `items-center`, `flex-nowrap`, `gap-2xs`, `pt-[2px]`]);
-
-                const profileName = prependElement(profileContainer, `div`, [`font-bold`, `text-neutral-content-strong`, `text-12`]);
-                profileName.textContent = `u/${userId}`;
-                profileName.style.color = `#696969`;
+                if (profileContainer) {
+                    const profileName = prependElement(profileContainer, `div`, [`font-bold`, `text-neutral-content-strong`, `text-12`]);
+                    profileName.textContent = `u/${userId}`;
+                    profileName.style.color = `#696969`;
+                }
             } else {
                 const profileName = prependElement(nickName.parentElement!, `div`);
                 profileName.textContent = `| u/${userId}`;
