@@ -210,7 +210,7 @@ export async function renderComment(comment: Element) {
 
     // add anchors
     const commentAuthor = commentMeta.querySelector(`faceplate-tracker[noun="comment_author"]`);
-    const nickname = commentAuthor?.parentElement?.parentElement?.parentElement;
+    const nickname = commentAuthor?.parentElement?.parentElement;
 
     if (!nickname || !nickname.parentElement) return;
 
