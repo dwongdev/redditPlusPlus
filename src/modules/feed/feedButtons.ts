@@ -97,8 +97,6 @@ export async function renderFeedButtons(main: Element) {
         if (data.hiddenSort.includes(sort) && sort != currentSort) continue;
 
         const button = appendElement(buttonsContainer, `a`, [
-            `inline-flex`,
-            `flex-col`,
             `text-secondary-plain-weak`,
             `font-semibold`,
             `rounded-full`,
@@ -106,9 +104,7 @@ export async function renderFeedButtons(main: Element) {
             `hover:text-secondary-plain`,
             `hover:bg-secondary-background-hover`,
             `hover:text-secondary-content`,
-            `active:bg-secondary-background`,
-            `ps-[var(--rem16)]`,
-            `pe-[var(--rem16)]`
+            `active:bg-secondary-background`
         ]) as HTMLAnchorElement;
 
         button.href = generateFeedHref(location, sort);
