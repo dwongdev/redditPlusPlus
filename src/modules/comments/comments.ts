@@ -223,7 +223,7 @@ export async function renderComment(comment: Element) {
         nickname.after(tagsAnchor);
     }
 
-    const time = await dynamic(() => nickname?.parentElement?.querySelector(`time`)?.parentElement, MAX_LOAD_LAG);
+    const time = await dynamic(() => commentMeta?.querySelector(`faceplate-tracker[noun="comment_time"]`), MAX_LOAD_LAG);
 
     const infoAnchor = document.createElement(`div`);
     infoAnchor.setAttribute(`pp-anchor`, `info`);
