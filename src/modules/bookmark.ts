@@ -114,6 +114,7 @@ function renderBookmarkButton(referenceButton: Element, originButton: Element, s
     button.classList.add(`pp_bookmark_button`);
     button.removeAttribute(`disabled`);
     button.removeAttribute(`downvote`);
+    button.removeAttribute(`data-action-bar-action`);
 
     const enabledSvg = buildSvg(bookmarkSavedSvg, 16, 16) as SVGSVGElement;
     button.querySelector(`.vote-icon-fill`)!.querySelector(`svg`)!.replaceWith(enabledSvg);
