@@ -29,7 +29,7 @@ function isRedirectable() {
 
     const subSplit = window.location.href.split(`/r/`);
     if (subSplit.length == 2) {
-        return subSplit[1].split(`/`).length <= 2;
+        return !subSplit[1].includes(`/submit`) && subSplit[1].split(`/`).length <= 2;
     }
 
     const customSplit = window.location.href.split(`/m/`);
