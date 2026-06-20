@@ -45,11 +45,12 @@ export async function renderComments(container: Element) {
         rootIntersector = new IntersectionObserver(
             entries => {
                 for (const entry of entries) {
-                    if (entry.isIntersecting && isComment(entry.target.parentElement)) {
-                        renderComment(entry.target.parentElement!);
+                    const comment = entry.target?.parentElement?.parentElement;
+                    if (entry.isIntersecting && isComment(comment)) {
+                        renderComment(comment!);
 
                         // registry childs when root becomes visible
-                        registerAllComments(entry.target.parentElement!);
+                        registerAllComments(comment!);
 
                         if (DEBUG && PROFILE_USER_DATA) {
                             profiler_comments.observedRoots--;
@@ -74,8 +75,9 @@ export async function renderComments(container: Element) {
         commentsIntersector = new IntersectionObserver(
             entries => {
                 for (const entry of entries) {
-                    if (entry.isIntersecting && isComment(entry.target.parentElement)) {
-                        renderComment(entry.target.parentElement!);
+                    const comment = entry.target?.parentElement?.parentElement;
+                    if (entry.isIntersecting && isComment(comment)) {
+                        renderComment(comment!);
 
                         if (DEBUG && PROFILE_USER_DATA) {
                             profiler_comments.observedChilds--;
@@ -147,7 +149,7 @@ function registerAllRoots(container: Element) {
 function registerRoot(comment: Element) {
     if (checkIsRendered(comment)) return;
 
-    rootIntersector!.observe(comment.querySelector(`div[slot="commentMeta"]`)!);
+    rootIntersector!.observe(comment.querySelector(`summary`)!);
 
     if (DEBUG && PROFILE_USER_DATA) {
         profiler_comments.observedRoots++;
@@ -163,7 +165,7 @@ function registerAllComments(container: Element) {
 function registerComment(comment: Element) {
     if (checkIsRendered(comment)) return;
 
-    commentsIntersector!.observe(comment.querySelector(`div[slot="commentMeta"]`)!);
+    commentsIntersector!.observe(comment.querySelector(`summary`)!);
 
     if (DEBUG && PROFILE_USER_DATA) {
         profiler_comments.observedChilds++;
@@ -201,7 +203,7 @@ export async function renderComment(comment: Element) {
             return isMod && isPinned ? true : null;
         }, MAX_LOAD_LAG).then(result => {
             if (result) {
-                comment.setAttribute(`collapsed`, ``);
+                comment.querySelector(`details`)?.toggleAttribute(`open`, false);
             }
         });
     }
@@ -289,6 +291,6 @@ async function waitActionRow(comment: Element) {
     );
 }
 
-function isComment(element: Element | null): boolean {
+function isComment(element: Element | null | undefined): boolean {
     return element?.matches(`shreddit-comment`) ?? false;
 }
