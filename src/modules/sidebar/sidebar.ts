@@ -1,3 +1,4 @@
+import { MAX_LOAD_LAG } from '../../defines';
 import { dynamic } from '../../utils/dynamic';
 import { appendElement, prependElement } from '../../utils/element';
 import { appendSvg } from '../../utils/svg';
@@ -47,9 +48,11 @@ export async function renderSidebar(sidebar: Element) {
 }
 
 async function RenderSettingsButton(sidebar: Element) {
-    const flexSidebar = await dynamic(() => sidebar.querySelector(`#flex-left-nav-container`));
+    const flexSidebar = await dynamic(() => sidebar.querySelector(`#flex-left-nav-container`), MAX_LOAD_LAG * 2);
 
-    const settingsButtonContainer = prependElement(flexSidebar!, `div`);
+    if (!flexSidebar) return;
+
+    const settingsButtonContainer = prependElement(flexSidebar, `div`);
     settingsButtonContainer.setAttribute(`id`, `pp-settings`);
 
     const settingsButtonTooltip = appendElement(settingsButtonContainer, `rpl-tooltip`);

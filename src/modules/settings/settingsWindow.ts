@@ -97,8 +97,8 @@ function renderSettingsWindow(win: Window, context: any) {
     addSettingToggle(`Unwrap "more replies"`, `Automatically unwrap more replies when it becomes visible`, settings.UNWRAP_MORE_REPLIES);
     addSettingToggle(`Hide share button`, `Move the share button to the comment context menu`, settings.HIDE_SHARE);
     addSettingToggle(`Ghosted comments`, `Fade comments with a negative score`, settings.GHOSTED_COMMENTS);
-    addSettingOptions(`Guidelines color`, null, settings.GUIDELINES_COLOR, [SettingBadge.New]);
-    addSettingToggle(`Thick guidelines`, `Doubling the thickness of comment guidelines`, settings.GUIDELINES_THICK, [SettingBadge.New]);
+    //addSettingOptions(`Guidelines color`, null, settings.GUIDELINES_COLOR, [SettingBadge.New]);
+    //addSettingToggle(`Thick guidelines`, `Doubling the thickness of comment guidelines`, settings.GUIDELINES_THICK, [SettingBadge.New]);
     addSettingToggle(`Collapse pinned`, `Automatically collapse pinned comments (AutoModerator and moderators)`, settings.COLLAPSE_AUTOMODERATOR);
     addSettingOptions(`Save bookmarks`, `Show the save button next to vote buttons`, settings.SAVED_BOOKMARK_COMMENTS);
 

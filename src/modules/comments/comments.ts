@@ -173,7 +173,7 @@ function registerComment(comment: Element) {
 }
 
 export async function renderComment(comment: Element) {
-    renderGuidlines(comment);
+    //renderGuidlines(comment);
 
     // skip [deleted]
     if (comment.getAttribute(`author`) == `[deleted]`) return;

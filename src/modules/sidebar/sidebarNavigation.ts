@@ -1,3 +1,4 @@
+import { MAX_LOAD_LAG } from '../../defines';
 import { dynamic } from '../../utils/dynamic';
 import { pascalCase } from '../../utils/tools';
 import { settings } from '../settings/settings';
@@ -21,11 +22,13 @@ export async function RenderSidebarNavigations(sidebar: Element) {
         sidebar = document.body.querySelector(`#left-sidebar-container`)!;
     }
 
-    const section = await dynamic(() => sidebar.querySelector(`left-nav-top-section`));
+    const section = await dynamic(() => sidebar.querySelector(`left-nav-top-section`), MAX_LOAD_LAG * 2);
+
+    if (!section) return;
 
     Object.values(SidebarNavigation).forEach(name => {
         const setting = settings.SIDEBAR_NAV_BUTTON.getChild(pascalCase(name), true);
 
-        section!.toggleAttribute(name, setting.isEnabled());
+        section.toggleAttribute(name, setting.isEnabled());
     });
 }

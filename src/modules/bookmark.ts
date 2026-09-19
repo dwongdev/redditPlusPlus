@@ -67,10 +67,7 @@ export async function renderBookmarkPost(post: Element, forceRender: boolean = f
 
     let saveButton: Element | null = contextMenu.querySelector(`#post-overflow-save`);
 
-    if (!saveButton) {
-        pp_log(`failed to find origin bookmark button in context menu (${post.getAttribute(`permalink`)})`);
-        return;
-    }
+    if (!saveButton) return;
 
     let isSaved: boolean = forceSaved != undefined ? true : saveButton?.querySelector(`.text-body-2`)?.textContent == `Remove from saved`;
 

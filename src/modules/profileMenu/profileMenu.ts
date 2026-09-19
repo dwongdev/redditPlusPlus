@@ -1,5 +1,6 @@
 import { appendElement } from '../../utils/element';
 import { NONE_COLOR, buildSvg } from '../../utils/svg';
+import { checkIsRendered } from '../../utils/tools';
 import { css } from '../customCSS';
 import { PrefsKey, prefs } from '../settings/prefs';
 import { settingsWindow } from '../settings/settingsWindow';
@@ -289,6 +290,11 @@ export function renderProfileMenu() {
 
     profileMenu.classList.toggle(`pp_defaultText`, true);
 
+    if (profileMenu.querySelector(`faceplate-tracker[noun="login"]`)) {
+        renderUnloggened(profileMenu);
+        return;
+    }
+
     const undefinedElements = new Array<Element>();
 
     // initialization
@@ -379,6 +385,17 @@ export function renderProfileMenu() {
 
     function addHr(): void {
         appendElement(profileMenu!, `hr`, [`h-px`, `w-100`, `bg-neutral-border-weak`, `border-0`]);
+    }
+}
+
+function renderUnloggened(profileMenu: HTMLElement) {
+    if (checkIsRendered(profileMenu, `pp-unloggened`)) return;
+
+    const originButton = profileMenu.querySelector(`faceplate-tracker[noun="advertise"]`)!;
+    const buttonConfig = profileMenuElementConfigs.get(ProfileMenuElement.PlusPlus);
+
+    if (originButton && buttonConfig) {
+        renderCustomButton(originButton, buttonConfig);
     }
 }
 

@@ -25,14 +25,14 @@ export async function renderHeader(container: Element) {
         logoPP.innerHTML = logoPP.textContent + ` <sup>(dev ${VERSION})</sup>`;
     }
 
-    dynamic(() => nav.querySelector(`span[data-part="inbox"]`)?.parentElement?.parentElement).then(userPanel => {
-        if (!userPanel) return;
+    const userPanel = await dynamic(() => nav.querySelector(`span[data-part="inbox"]`)?.parentElement?.parentElement ?? nav.querySelector(`span[data-part="primary"]`)?.parentElement);
 
+    if (userPanel) {
         userPanel.classList.add(`pp_userPanel`);
         userPanel.addEventListener(`click`, () => {
             renderProfileMenu();
         });
-    });
+    }
 
     /*
     if (settings.NOTIFY_POPUP.isEnabled() && !notificationsInitialized) {
