@@ -1,3 +1,5 @@
+import { MAX_LOAD_LAG } from '../../defines';
+import { dynamic } from '../../utils/dynamic';
 import { appendElement } from '../../utils/element';
 import { NONE_COLOR, buildSvg } from '../../utils/svg';
 import { checkIsRendered } from '../../utils/tools';
@@ -415,9 +417,11 @@ function renderCustomButton(originButton: Element, config: ProfileMenuElementCon
         anchor.removeAttribute(`href`);
     }
 
-    const originSvg = ppSettingsButton.querySelector(`svg`)!;
-    const svg = buildSvg(config.icon, 20, 20, { strokeColor: NONE_COLOR });
-    originSvg.replaceWith(svg);
+    dynamic(() => ppSettingsButton.querySelector(`rpl-icon[name="settings"]`)?.shadowRoot?.querySelector(`svg`), MAX_LOAD_LAG).then(originSvg => {
+        if (!originSvg) return;
+        const svg = buildSvg(config.icon, 20, 20, { strokeColor: NONE_COLOR });
+        originSvg.replaceWith(svg);
+    });
 
     let text = ppSettingsButton.querySelector(`.text-body-2`)!;
     text.textContent = config.tittle;

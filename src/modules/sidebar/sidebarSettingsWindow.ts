@@ -5,7 +5,7 @@ import { pascalCase } from '../../utils/tools';
 import { Window } from '../../utils/window';
 import { css } from '../customCSS';
 import { settings } from '../settings/settings';
-import { SidebarNavigation, navigations } from './sidebarNavigation';
+import { SidebarNavigation, navigationConfigs } from './sidebarNavigation';
 import { sections } from './sidebarSection';
 
 import style from './sidebarSettingsWindow.less';
@@ -73,12 +73,12 @@ function renderSettingsWindow(win: Window, context: any) {
     const subtittleNavigations = appendElement(elements, `h3`, `pp_settings_subtittle`);
     subtittleNavigations.textContent = `Navigation buttons`;
 
-    navigations.forEach((tittleText, navigaton) => {
+    navigationConfigs.forEach((config, navigaton) => {
         const propertyArea = appendElement(elements, `div`, `pp_window_element`);
 
         const header = appendElement(propertyArea, `div`, `pp_settings_propertyHeader`);
         const tittle = appendElement(header, `div`, `pp_settings_propertyHeader_tittle`);
-        tittle.textContent = tittleText;
+        tittle.textContent = config.tittle;
         propertyArea.classList.add(`pp_settings_property_oneLine`);
 
         const buttonContainer = appendElement(propertyArea, `div`, `pp_settings_propertyButtonContainer`);

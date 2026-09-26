@@ -10,11 +10,16 @@ export enum SidebarNavigation {
     Explore = `explore`
 }
 
-export let navigations: Map<SidebarNavigation, string> = new Map<SidebarNavigation, string>([
-    [SidebarNavigation.Home, `Home`],
-    [SidebarNavigation.Popular, `Popular`],
-    [SidebarNavigation.News, `News`],
-    [SidebarNavigation.Explore, `Explore`]
+export interface SidebarNavigationConfig {
+    tittle: string;
+    removeById?: string;
+}
+
+export const navigationConfigs: Map<SidebarNavigation, SidebarNavigationConfig> = new Map<SidebarNavigation, SidebarNavigationConfig>([
+    [SidebarNavigation.Home, { tittle: `Home` }],
+    [SidebarNavigation.Popular, { tittle: `Popular` }],
+    [SidebarNavigation.News, { tittle: `News`, removeById: `news-posts` }],
+    [SidebarNavigation.Explore, { tittle: `Explore` }]
 ]);
 
 export async function RenderSidebarNavigations(sidebar: Element) {
@@ -28,7 +33,12 @@ export async function RenderSidebarNavigations(sidebar: Element) {
 
     Object.values(SidebarNavigation).forEach(name => {
         const setting = settings.SIDEBAR_NAV_BUTTON.getChild(pascalCase(name), true);
+        const config = navigationConfigs.get(name)!;
 
         section.toggleAttribute(name, setting.isEnabled());
+
+        if (config.removeById && setting.isDisabled()) {
+            dynamic(() => section?.shadowRoot?.querySelector(`#${config.removeById}`), MAX_LOAD_LAG).then(news => news?.remove());
+        }
     });
 }

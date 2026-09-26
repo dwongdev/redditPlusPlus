@@ -1,6 +1,7 @@
+import { MAX_LOAD_LAG } from '../../defines';
 import { renderUIInput } from '../../utils/UI/input';
 import { dynamic } from '../../utils/dynamic';
-import { CURRENT_COLOR, NONE_COLOR, appendSvg } from '../../utils/svg';
+import { CURRENT_COLOR, NONE_COLOR, appendSvg, buildSvg } from '../../utils/svg';
 import { checkIsRendered } from '../../utils/tools';
 import { PrefsKey, prefs } from '../settings/prefs';
 import { settings } from '../settings/settings';
@@ -61,11 +62,12 @@ export async function renderSubFilter(container: Element) {
     manageSubsLink.replaceWith(input);
     input.prepend(manageSubsLink);
 
-    const manageSubsLinkIco = manageSubsLink.querySelector(`svg`)!;
-    const manageSubsLinkIcoContainer = manageSubsLink.querySelector(`svg`)!.parentElement!;
-    manageSubsLinkIco.remove();
+    dynamic(() => manageSubsLink.querySelector(`rpl-icon[name="settings"]`)?.shadowRoot?.querySelector(`svg`), MAX_LOAD_LAG).then(originSvg => {
+        if (!originSvg) return;
 
-    appendSvg(manageSubsLinkIcoContainer, subsManagerSvg, 20, 20);
+        const iconSvg = buildSvg(subsManagerSvg, 20, 20);
+        originSvg.replaceWith(iconSvg);
+    });
 
     const inputButton = input.querySelector(`.pp_ui_input_button`)!;
     inputButton.addEventListener(`focus`, () => {
